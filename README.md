@@ -18,7 +18,7 @@ This is a simple issue tracker application built with Next.js, Prisma, and Neon.
 5. Create a `.env.local` file with the following content:
 
 ```javascript
-    DATABASE_URL=<your url>
+    DATABASE_URL=<your-url>
 ```
 6. Watch the [video tutorial](https://youtu.be/J9sfR6HN6BY?si=MUfGfcvq88h1q5Vf) to learn more about the project.
 
