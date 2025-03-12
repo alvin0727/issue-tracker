@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createIssueSchema } from "@/app/validationSchemas";
-import { set, z } from 'zod';
+import { z } from 'zod';
 import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
 
@@ -23,8 +23,10 @@ const NewIssuePage = () => {
     const { register, control, handleSubmit, formState: { errors } } = useForm<IssueForm>({
         resolver: zodResolver(createIssueSchema)
     });
+
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+
     const onSubmit = handleSubmit(async (data) => {
         try {
             setIsSubmitting(true);
@@ -34,25 +36,44 @@ const NewIssuePage = () => {
             setIsSubmitting(false);
             setError('An unexpected error occurred. Please try again later.');
         }
+    });
 
-    })
     return (
-        <div className='max-w-xl'>
-            {error && <Callout.Root color="red" className="mb-5">
-                <Callout.Text>{error}</Callout.Text>
-            </Callout.Root>}
-            <form className='space-y-3' onSubmit={onSubmit}>
-                <TextField.Root placeholder='Title' {...register('title')} />
-                <ErrorMessage >{errors.title?.message}</ErrorMessage>
-                <Controller
-                    name="description"
-                    control={control}
-                    render={({ field }) => (
-                        <SimpleMDE placeholder='Description'  {...field} />
-                    )}
-                />
-                <ErrorMessage>{errors.description?.message}</ErrorMessage>
-                <Button disabled={isSubmitting}>Submit New Issue {isSubmitting && <Spinner />}</Button>
+        <div className='max-w-xl mx-auto p-6 bg-white shadow-md rounded-lg'>
+            {error && (
+                <Callout.Root color="red" className="mb-5">
+                    <Callout.Text>{error}</Callout.Text>
+                </Callout.Root>
+            )}
+
+            <form className='space-y-4' onSubmit={onSubmit}>
+                {/* Input Title */}
+                <div>
+                    <TextField.Root
+                        placeholder='Title'
+                        {...register('title')}
+                        aria-invalid={!!errors.title}
+                        className="w-full border p-2 rounded-md"
+                    />
+                    {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
+                </div>
+
+                {/* Input Description */}
+                <div>
+                    <Controller
+                        name="description"
+                        control={control}
+                        render={({ field }) => (
+                            <SimpleMDE placeholder='Description' {...field} />
+                        )}
+                    />
+                    {errors.description && <ErrorMessage>{errors.description.message}</ErrorMessage>}
+                </div>
+
+                {/* Submit Button */}
+                <Button disabled={isSubmitting} className="w-full py-2 mt-4">
+                    {isSubmitting ? <><Spinner /> Submitting...</> : "Submit New Issue"}
+                </Button>
             </form>
         </div>
     );
