@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link'
-import React from 'react'
+import React from 'react';
 import { usePathname } from 'next/navigation';
 import { FaBug } from "react-icons/fa";
 import classNames from 'classnames';
@@ -15,7 +15,7 @@ const NavBar = () => {
     return (
         <nav className='flex justify-between items-center p-4 h-12 bg-gray-800 text-white'>
             <Link href="/"><FaBug /></Link>
-            <ul className='flex space-x-4'>
+            <ul className='flex space-x-4 pr-10'>
                 {links.map(link => <Link key={link.href}
                     href={link.href}
                     className={classNames({
